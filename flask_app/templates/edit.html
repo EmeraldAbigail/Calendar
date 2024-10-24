@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit an Idea</title> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <header> 
+        <div class="d-flex justify-content-between align-items-center py-2 px-5">
+            <h1>Edit My Idea</h1>
+            <a class="d-flex corner" href="/main">Cancel</a>
+            <a href="/main">Dashboard</a>
+        </div>
+    </header>
+    <hr>
+    <main class="d-flex justify-content-around">
+        <div class="col-4 bg-light p-3 rounded"> 
+            <h2 class="text-center mb-4">Idea by {{session ['first_name']}}</h2>
+            {% if idea %}
+                <form action="/idea/{{ idea.id }}/edit" method="POST"> 
+                    <input type="hidden" name="idea_id" value="{{ idea.id }}"> 
+                    <div class="mb-3">
+                        <label for="post" class="form-label">Post:</label>
+                        <input type="text" class="form-control" id="post" name="post" value="{{ idea.post }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Change</button>
+
+                    {% with messages = get_flashed_messages(category_filter=["idea"]) %}
+                        {% if messages %}
+                            <div class="alert alert-danger mt-2" role="alert">
+                                {% for message in messages %}
+                                    <p>{{ message }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                </form>
+            {% else %}
+                <p>Idea not found.</p>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>
