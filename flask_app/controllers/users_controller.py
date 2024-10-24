@@ -1,6 +1,7 @@
 from flask import render_template, redirect, flash, request, session
 from flask_app.models.user import User
-from flask_app.models.calendar import Calendar
+from flask_app.models.event import Event
+import datetime
 
 from flask_app import app
 
@@ -30,19 +31,26 @@ def login():
     return redirect('/main')  
 
 #Route for the Calendar
-@app.route("/main")
-def main():
+@app.route('/main')
+@app.route("/main/<date>")
+def main(date = None):
     #Check if the user is logged in 
     if 'user_id' not in session:
         #If the user is not logged in, redirect to the logout route
         return redirect('/')
-    #If the user is logged in, render the calendar template
+    if date is None: 
+        date_str = datetime.date.today().strftime('%Y-%m-%d')
+    else: 
+        date_str = date
     data = {
-        'id': session['user_id']
-    }
-    calendar = Calendar.all_calendar_details() 
+        'date': date_str,
+        'users_id': session['user_id']
+    } 
+    print(data)
+    events= Event.events_by_date(data)
+    print (events)
     #Render the calendar template with the user's data
-    return render_template("main.html", calendar=calendar, user=User.get_by_id(data))
+    return render_template("main.html", events=events)
 
 #Route for logging out the User
 @app.route("/logout")

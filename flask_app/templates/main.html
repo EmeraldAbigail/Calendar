@@ -9,9 +9,9 @@
 </head>
 
 <body>
-    <div class="d-flex justify-content-between align-items-center py-2 px-5">
+    <div class="d-flex justify-content-between align-items-center py-6 px-4">
         <h1>Welcome, {{session['first_name']}}.</h1>
-        <a href="/logout" class="btn btn-info">Logout</a>
+        <a href="/logout" class="btn btn-secondary">Log Out</a>
     </div>
     <hr>
     <main class="d-flex justify-content-around">
@@ -20,18 +20,19 @@
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th>Today:</th>
+                        <th>Today's Events:</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for idea in ideas %}
+                    {% for event in events %}
                     <tr>
-                        <td><a href="/calendar/user_calendar/{{calendar.user_id}}">{{user.first_name}}</a></td>
-                        <td>{{calendar.name}}</td>
+                        <td>{{ event.title }}</td>
                         <td>
-                            {% if session['user_id'] == calendar.users_id %}
-                            <a href="/calendar/{{calendar.id}}/edit">Edit</a> |
-                            <a href="/calendar/delete/{{calendar.id}}">Delete</a>
+                            <a href="/calendar/{{event.id}}/event/details" class="btn btn-sm btn-info">Details</a>
+                            {% if event.users_id == session ['user_id'] %}
+                            <a href="/events/{{ event.id }}/edit" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="/calendar/delete/{{ event.id }}/event" class="btn btn-sm btn-danger">Delete</a>
                             {% endif %}
                         </td>
                     </tr>
@@ -39,33 +40,13 @@
                 </tbody>
             </table>
             <div class="container mt-4">
-                <h2 class="text-center">Add a New Event</h2>
-                <form action="/insert/event" method="POST">
-                    <div class="form-group">
-                        <label for="name">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Your Event</button>
-                    <div class="container mt-4">
-                        <h2 class="text-center">Add to Shopping List:</h2>
-                        <form action="/insert/item" method="POST">
-                            <div class="form-group">
-                                <label for="Item">Item:</label>
-                                <input type="text" class="form-control" id="item" name="item">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Add Your Item</button>
-                            {% with messages = get_flashed_messages(category_filter=["idea"]) %}
-                            {% if messages %}
-                            <div class="alert alert-danger mt-2" role="alert">
-                                {% for message in messages %}
-                                <p>{{message}}</p>
-                                {% endfor %}
-                            </div>
-                            {% endif %}
-                            {% endwith %}
-                        </form>
-                    </div>
+                <a href="/show/event_form" class="btn btn-success">Add Event </a>
+                <a href="/show/item_form" class="btn btn-success">Add to Shopping List</a>
             </div>
+            
+
+            </td>
+        </div>
     </main>
 </body>
 

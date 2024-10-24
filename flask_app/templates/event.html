@@ -11,8 +11,10 @@
     <header>
         <div class="d-flex justify-content-between align-items-center py-2 px-5">
             <h1 class="text-center">Welcome, {{session['first_name']}}.</h1>
-            <a href="/main" class="btn btn-info">Calendar</a>
-            <a href="/logout" class="btn btn-info">Logout</a>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="/main" class="btn btn-primary">Main Calendar</a>
+            <a href="/logout" class="btn btn-secondary">Log Out</a> 
+            </div>
         </div>
     </header>
     <hr>
@@ -21,7 +23,7 @@
             <div class="col-md-6 bg-dark text-light p-4 rounded">
                 <div class="container mt-4">
                     <h2 class="text-center">Add a New Event</h2>
-                    <form action="/insert/event" method="POST">
+                    <form action="/create_event" method="POST">
                         <div class="form-group">
                             <label for="title">Title:</label>
                             <input type="text" class="form-control" id="title" name="title">
@@ -40,14 +42,15 @@
 
                             <label for="recurrence">Recurrence:</label>
                             <select class="form-control" id="recurrence" name="recurrence">
-                                <option value="none">None</option>
-                                <option value="daily">Daily</option>
-                                <option value="weekly">Weekly</option>
-                                <option value="monthly">Monthly</option>
+                                <option value="1">None</option>
+                                <option value="2">Daily</option>
+                                <option value="3">Weekly</option>
+                                <option value="4">Monthly</option>
                             </select>
                         </div>
+                        <hr>
                         <button type="submit" class="btn btn-primary">Add Your Event</button>
-
+                        </tr>
                         {% with messages = get_flashed_messages(category_filter=["event"]) %}
                         {% if messages %}
                         <div class="alert alert-danger mt-2" role="alert">

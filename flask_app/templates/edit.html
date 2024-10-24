@@ -1,46 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit an Idea</title> 
+    <title>Edit an Event</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
-    <header> 
+    <header>
         <div class="d-flex justify-content-between align-items-center py-2 px-5">
-            <h1>Edit My Idea</h1>
-            <a class="d-flex corner" href="/main">Cancel</a>
-            <a href="/main">Dashboard</a>
+            <h1>Edit My Event</h1>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/main" class="btn btn-primary">Main Calendar</a>
+                <a href="/logout" class="btn btn-secondary">Log Out</a>
+            </div>
         </div>
     </header>
     <hr>
     <main class="d-flex justify-content-around">
-        <div class="col-4 bg-light p-3 rounded"> 
-            <h2 class="text-center mb-4">Idea by {{session ['first_name']}}</h2>
-            {% if idea %}
-                <form action="/idea/{{ idea.id }}/edit" method="POST"> 
-                    <input type="hidden" name="idea_id" value="{{ idea.id }}"> 
+        <div class="col-4 bg-light p-3 rounded">
+            <h2 class="text-center mb-4">Event by {{session ['first_name']}}</h2>
+            {% if event %}
+            <form action="/events/{{ event.id }}/update" method="POST">
+                <input type="hidden" name="event_id" value="{{ event.id }}">
+                <div class="mb-3">
+                    <label for="post" class="form-label">Title:</label>
+                    <input type="text" class="form-control" id="title" name="title" value="{{ event.title }}">
                     <div class="mb-3">
-                        <label for="post" class="form-label">Post:</label>
-                        <input type="text" class="form-control" id="post" name="post" value="{{ idea.post }}">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Change</button>
+                        <label for="start_time" class="form-label">Start Time:</label>
+                        <input type="datetime-local" class="form-control" id="start_time" name="start_time"
+                            value="{{event.start_time}}">
+                        <label for="end_time">End Time:</label>
+                        <input type="datetime-local" class="form-control" id="end_time" name="end_time"
+                            value="{{ event.end_time }}">
+                        <label for="location">Location:</label>
+                        <input type="text" class="form-control" id="location" name="location"
+                            value="{{ event.location }}">
+                        <label for="details">Details:</label>
+                        <textarea class="form-control" id="details" name="details">{{ event.details }}</textarea>
 
-                    {% with messages = get_flashed_messages(category_filter=["idea"]) %}
-                        {% if messages %}
-                            <div class="alert alert-danger mt-2" role="alert">
-                                {% for message in messages %}
-                                    <p>{{ message }}</p>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    {% endwith %}
-                </form>
+                        <label for="recurrence">Recurrence:</label>
+                        <select class="form-control" id="recurrence" name="recurrence">
+                            <option value="1" {% if event.recurrence=='none' %}selected{% endif %}>None</option>
+                            <option value="2" {% if event.recurrence=='daily' %}selected{% endif %}>Daily</option>
+                            <option value="3" {% if event.recurrence=='weekly' %}selected{% endif %}>Weekly
+                            </option>
+                            <option value="4" {% if event.recurrence=='monthly' %}selected{% endif %}>Monthly
+                            </option>
+                        </select>
+                    </div>
+                    <td>
+                        <button class="btn btn-sm btn-warning">Update</button>
+                        <a href="/calendar/delete/{{ event.id }}/event" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </div>
+
+                {% with messages = get_flashed_messages(category_filter=["event"]) %}
+                {% if messages %}
+                <div class="alert alert-danger mt-2" role="alert">
+                    {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+            </form>
             {% else %}
-                <p>Idea not found.</p>
+            <p>Event not found.</p>
             {% endif %}
         </div>
     </main>
 </body>
+
 </html>
